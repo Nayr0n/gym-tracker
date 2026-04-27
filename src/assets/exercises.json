@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Barbell Bench Press",
+    "description": "Classic chest press using a barbell on a flat bench.",
+    "img": "barbell_bench_press.png",
+    "muscle_group": "chest"
+  },
+  {
+    "name": "Incline Dumbbell Press",
+    "description": "Upper chest focused press on incline bench.",
+    "img": "incline_dumbbell_press.png",
+    "muscle_group": "chest"
+  },
+  {
+    "name": "Push-Up",
+    "description": "Bodyweight pressing movement for chest, shoulders and triceps.",
+    "img": "push_up.png",
+    "muscle_group": "chest"
+  },
+  {
+    "name": "Pull-Up",
+    "description": "Bodyweight vertical pulling movement for lats and biceps.",
+    "img": "pull_up.png",
+    "muscle_group": "back"
+  },
+  {
+    "name": "Barbell Row",
+    "description": "Bent-over rowing movement for mid back and lats.",
+    "img": "barbell_row.png",
+    "muscle_group": "back"
+  },
+  {
+    "name": "Lat Pulldown",
+    "description": "Cable pulling movement targeting the lats.",
+    "img": "lat_pulldown.png",
+    "muscle_group": "back"
+  },
+  {
+    "name": "Barbell Squat",
+    "description": "Foundational lower body movement for quads and glutes.",
+    "img": "barbell_squat.png",
+    "muscle_group": "legs"
+  },
+  {
+    "name": "Front Squat",
+    "description": "Quad-dominant squat with front rack position.",
+    "img": "front_squat.png",
+    "muscle_group": "legs"
+  },
+  {
+    "name": "Leg Press",
+    "description": "Machine lower body press emphasizing quads.",
+    "img": "leg_press.png",
+    "muscle_group": "legs"
+  },
+  {
+    "name": "Romanian Deadlift",
+    "description": "Hip hinge movement for hamstrings and glutes.",
+    "img": "romanian_deadlift.png",
+    "muscle_group": "legs"
+  },
+  {
+    "name": "Deadlift",
+    "description": "Full-body hinge movement focusing posterior chain.",
+    "img": "deadlift.png",
+    "muscle_group": "back"
+  },
+  {
+    "name": "Walking Lunge",
+    "description": "Dynamic unilateral leg movement.",
+    "img": "walking_lunge.png",
+    "muscle_group": "legs"
+  },
+  {
+    "name": "Hip Thrust",
+    "description": "Glute-focused hip extension movement.",
+    "img": "hip_thrust.png",
+    "muscle_group": "glutes"
+  },
+  {
+    "name": "Overhead Press",
+    "description": "Standing barbell shoulder press.",
+    "img": "overhead_press.png",
+    "muscle_group": "shoulders"
+  },
+  {
+    "name": "Seated Dumbbell Press",
+    "description": "Seated shoulder press using dumbbells.",
+    "img": "seated_dumbbell_press.png",
+    "muscle_group": "shoulders"
+  },
+  {
+    "name": "Lateral Raise",
+    "description": "Isolation movement for side delts.",
+    "img": "lateral_raise.png",
+    "muscle_group": "shoulders"
+  },
+  {
+    "name": "Rear Delt Fly",
+    "description": "Isolation movement for rear deltoids.",
+    "img": "rear_delt_fly.png",
+    "muscle_group": "shoulders"
+  },
+  {
+    "name": "Barbell Curl",
+    "description": "Classic biceps curl with barbell.",
+    "img": "barbell_curl.png",
+    "muscle_group": "biceps"
+  },
+  {
+    "name": "Hammer Curl",
+    "description": "Neutral-grip curl for biceps and brachialis.",
+    "img": "hammer_curl.png",
+    "muscle_group": "biceps"
+  },
+  {
+    "name": "Tricep Pushdown",
+    "description": "Cable isolation for triceps.",
+    "img": "tricep_pushdown.png",
+    "muscle_group": "triceps"
+  },
+  {
+    "name": "Skull Crusher",
+    "description": "Lying triceps extension.",
+    "img": "skull_crusher.png",
+    "muscle_group": "triceps"
+  },
+  {
+    "name": "Plank",
+    "description": "Core stability hold.",
+    "img": "plank.png",
+    "muscle_group": "core"
+  },
+  {
+    "name": "Hanging Leg Raise",
+    "description": "Lower ab focused hanging movement.",
+    "img": "hanging_leg_raise.png",
+    "muscle_group": "core"
+  },
+  {
+    "name": "Calf Raise",
+    "description": "Isolation movement for calves.",
+    "img": "calf_raise.png",
+    "muscle_group": "calves"
+  },
+  {
+    "name": "Face Pull",
+    "description": "Cable pull for rear delts and upper back.",
+    "img": "face_pull.png",
+    "muscle_group": "back"
+  }
+]

@@ -1,10 +1,13 @@
 import sqlite3
+import json
+import os
 from models import Workout, Exercise, Set
 
 class Database:
     def __init__(self, db_name):
         self.conn = sqlite3.connect(db_name)
         self.create_tables()
+        self._seed_exercises()
 
     def create_tables(self):
         cursor = self.conn.cursor()
@@ -38,6 +41,16 @@ class Database:
         )''')
 
         self.conn.commit()
+
+    def _seed_exercises(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM exercises')
+        if cursor.fetchone()[0] == 0:
+            with open(os.path.join(os.path.dirname(__file__), 'assets', 'exercises.json'), 'r', encoding='utf-8') as f:
+                exercises_data = json.load(f)
+                for ex in exercises_data:
+                    exercise = Exercise(name=ex['name'], description=ex['description'], img=ex['img'], muscle_group=ex['muscle_group'], sets=[])
+                    self.add_exercise(exercise)
 
     def add_set(self, workout_id, exercise_id, set):
         cursor = self.conn.cursor()
