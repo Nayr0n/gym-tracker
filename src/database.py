@@ -52,6 +52,15 @@ class Database:
                     exercise = Exercise(name=ex['name'], description=ex['description'], img=ex['img'], muscle_group=ex['muscle_group'], sets=[])
                     self.add_exercise(exercise)
 
+    def get_all_exercises(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT * FROM exercises')
+        catalog = []
+        for raw in cursor.fetchall():
+            ex = Exercise(id=raw[0], name=raw[1], description=raw[2], img=raw[3], muscle_group=raw[4], sets=[])
+            catalog.append(ex)
+        return catalog
+
     def add_set(self, workout_id, exercise_id, set):
         cursor = self.conn.cursor()
         cursor.execute('''INSERT INTO sets (workout_id, exercise_id, status, reps, weight, rest_time) 
