@@ -1,4 +1,5 @@
 import sqlite3
+from models import Workout, Exercise, Set
 
 class Database:
     def __init__(self, db_name):
@@ -64,3 +65,34 @@ class Database:
             
         self.conn.commit()
         return workout_id
+    
+    def get_sets(self, workout_id, exercise_id):
+        cursor = self.conn.cursor()
+        cursor.execute('''SELECT * FROM sets WHERE workout_id = ? AND exercise_id = ?''', (workout_id, exercise_id))
+        sets = []
+        for raw in cursor.fetchall():
+            set = Set(id=raw[0], workout_id=raw[1], exercise_id=raw[2], status=raw[3], reps=raw[4], weight=raw[5], rest_time=raw[6])
+            sets.append(set)
+        return sets
+
+    def get_exercises(self, workout_id):
+        cursor = self.conn.cursor()
+        cursor.execute('''SELECT * FROM exercises WHERE id IN (SELECT exercise_id FROM sets WHERE workout_id = ?)''', (workout_id,))
+        exercises = []
+        for raw in cursor.fetchall():
+            exercise = Exercise(id=raw[0], name=raw[1], description=raw[2], img=raw[3], muscle_group=raw[4], sets=[])
+            exercise.sets = self.get_sets(workout_id, exercise.id)
+            exercises.append(exercise)
+        return exercises
+    
+    def get_workouts(self):
+        cursor = self.conn.cursor()
+        cursor.execute('''SELECT * FROM workouts''')
+        workouts = []
+        for raw in cursor.fetchall():
+            workout = Workout(id=raw[0], name=raw[1], description=raw[2], img=raw[3], date=raw[4], exercises=[])
+            workout.exercises = self.get_exercises(workout.id)
+            workouts.append(workout)
+        return workouts
+    
+        
