@@ -15,9 +15,6 @@ class WorkoutView:
         self.on_done        = on_done
         self.selected       = []
         self.sets_data      = {}
-        self.timer_seconds  = 0
-        self._timer_running = False
-        self._timer_ref     = ft.Ref()
         self._overlay_ref   = None
 
         self.exercise_view = ExerciseView(
@@ -28,29 +25,8 @@ class WorkoutView:
             on_exercise_added=lambda ex: None,
         )
 
-    # ── Timer ─────────────────────────────────────────────────────────────────
-    def _start_timer(self):
-        self._timer_running = True
-        def tick():
-            while self._timer_running:
-                time.sleep(1)
-                self.timer_seconds += 1
-                if self._timer_ref.current:
-                    self._timer_ref.current.value = self._fmt()
-                    try:
-                        self._timer_ref.current.update()
-                    except Exception:
-                        break
-        threading.Thread(target=tick, daemon=True).start()
-
-    def _fmt(self):
-        m, s = divmod(self.timer_seconds, 60)
-        h, m = divmod(m, 60)
-        return f"{h:02d}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
-
     # ── Close / Finish ────────────────────────────────────────────────────────
     def _close(self):
-        self._timer_running = False
         if self._overlay_ref and self._overlay_ref in self.page.overlay:
             self.page.overlay.remove(self._overlay_ref)
         self.page.update()
@@ -95,7 +71,6 @@ class WorkoutView:
                             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                             vertical_alignment=ft.CrossAxisAlignment.CENTER,
                             controls=[
-                                text_mono("00:00", ref=self._timer_ref),
                                 ft.IconButton(
                                     ft.Icons.CLOSE_ROUNDED,
                                     icon_color=SUBTEXT, icon_size=20,
@@ -133,5 +108,4 @@ class WorkoutView:
         )
 
         self._overlay_ref = body
-        self._start_timer()
         return body
