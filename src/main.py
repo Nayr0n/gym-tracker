@@ -16,16 +16,20 @@ def main(page: ft.Page):
         page.window.width  = 400
         page.window.height = 750
 
-    tab_views = {
-        "workout": WorkoutsView(page, db).build(),
-        "history": HistoryView(page, db).build(),
-        "stats":   StatsView(page, db).build(),
-    }
     NAV_KEYS = ["history", "workout", "stats"]
-    content_area = ft.Container(content=tab_views["workout"], expand=True)
+    content_area = ft.Container(content=WorkoutsView(page, db).build(), expand=True)
+
+    def build_view(key):
+        if key == "workout":
+            return WorkoutsView(page, db).build()
+        elif key == "history":
+            return HistoryView(page, db).build()
+        elif key == "stats":
+            return StatsView(page, db).build()
 
     def on_nav_change(e):
-        content_area.content = tab_views[NAV_KEYS[e.control.selected_index]]
+        key = NAV_KEYS[e.control.selected_index]
+        content_area.content = build_view(key)
         page.update()
 
     def route_change(e):

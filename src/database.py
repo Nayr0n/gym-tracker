@@ -117,4 +117,20 @@ class Database:
             workouts.append(workout)
         return workouts
     
+    def delete_workout(self, workout_id):
+        cursor = self.conn.cursor()
+        cursor.execute('DELETE FROM sets WHERE workout_id = ?', (workout_id,))
+        cursor.execute('DELETE FROM workouts WHERE id = ?', (workout_id,))
+        self.conn.commit()
+ 
+    def update_workout(self, workout):
+        cursor = self.conn.cursor()
+        cursor.execute('UPDATE workouts SET name = ?, date = ? WHERE id = ?',
+                       (workout.name, workout.date, workout.id))
+        cursor.execute('DELETE FROM sets WHERE workout_id = ?', (workout.id,))
+        for exercise in workout.exercises:
+            for s in exercise.sets:
+                self.add_set(workout.id, exercise.id, s)
+        self.conn.commit()
+    
         

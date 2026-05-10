@@ -1,6 +1,7 @@
 import flet as ft
 from database import Database
 
+
 class WorkoutsView:
     def __init__(self, page: ft.Page, db: Database):
         self.page = page
@@ -11,16 +12,14 @@ class WorkoutsView:
             self.page.go("/workout-details")
 
         return ft.Container(
-            expand=True, 
+            expand=True,
             content=ft.Column(
                 expand=True,
                 controls=[
-                    ft.AppBar(
-                        title=ft.Text("Workout"),
-                    ),
-                    ft.OutlinedButton(
-                        content=ft.Text("+ Start Workout"), 
-                        on_click=start_workout, 
+                    ft.AppBar(title=ft.Text("Workout")),
+                    ft.Button(
+                        content=ft.Text("+ Start Workout"),
+                        on_click=start_workout,
                         width=999,
                     ),
                 ],

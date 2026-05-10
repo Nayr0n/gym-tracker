@@ -1,45 +1,80 @@
 import flet as ft
 from database import Database
-from models import Workout, Exercise, Set
-from datetime import date
+from models import Set
 from views.exercises_view import ExercisesView
 
 
-class WorkoutDetailsView:
-    def __init__(self, page: ft.Page, db: Database):
+class HistoryDetailsView:
+    def __init__(self, page: ft.Page, db: Database, workout, on_back):
         self.page = page
         self.db = db
-        self.exercises = []
+        self.workout = workout
+        self.on_back = on_back
 
     def build(self):
         self.exercises_column = ft.Column(spacing=16)
         self._render()
 
-        def on_finish(e):
-            if not self.exercises:
-                return
-            self.db.save_workout(Workout(
-                name="Workout", description="", img="",
-                date=str(date.today()), exercises=self.exercises,
-            ))
-            self.page.go("/")
+        def on_save(e):
+            self.db.update_workout(self.workout)
+            self.page.views.pop()
+            self.page.update()
+            self.on_back()
+
+        def on_delete(e):
+            def confirm(e):
+                dlg.open = False
+                self.db.delete_workout(self.workout.id)
+                self.page.views.pop()
+                self.page.update()
+                self.on_back()
+
+            def cancel(e):
+                dlg.open = False
+                self.page.update()
+
+            dlg = ft.AlertDialog(
+                title=ft.Text("Видалити тренування?"),
+                actions=[
+                    ft.TextButton("Скасувати", on_click=cancel),
+                    ft.TextButton("Видалити", on_click=confirm),
+                ],
+            )
+
+            self.page.overlay.append(dlg)
+            dlg.open = True
+            self.page.update()
 
         return ft.View(
-            route="/workout-details",
+            route="/history-details",
             controls=[
                 ft.AppBar(
-                    leading=ft.IconButton(icon=ft.Icons.ARROW_BACK, on_click=lambda e: self.page.go("/")),
-                    title=ft.Text("Workout"),
+                    leading=ft.IconButton(
+                        icon=ft.Icons.ARROW_BACK,
+                        on_click=lambda e: (self.page.views.pop(), self.page.update()),
+                    ),
+                    title=ft.TextField(
+                        value=self.workout.name,
+                        border=ft.InputBorder.NONE,
+                        on_change=lambda e: setattr(self.workout, "name", e.control.value),
+                    ),
+                    actions=[
+                        ft.IconButton(icon=ft.Icons.DELETE_OUTLINE, on_click=on_delete),
+                    ],
                 ),
-                ft.Column(expand=True, controls=[self.exercises_column], scroll=ft.ScrollMode.AUTO),
-                ft.CupertinoButton(content=ft.Text("Finish"), on_click=on_finish, width=999),
+                ft.Column(
+                    expand=True,
+                    controls=[self.exercises_column],
+                    scroll=ft.ScrollMode.AUTO,
+                ),
+                ft.CupertinoButton(content=ft.Text("Save"), on_click=on_save, width=999),
             ],
         )
 
     def _render(self):
         self.exercises_column.controls.clear()
 
-        for ex in self.exercises:
+        for ex in self.workout.exercises:
             self.exercises_column.controls.append(self._exercise_block(ex))
 
         self.exercises_column.controls.append(
@@ -95,10 +130,8 @@ class WorkoutDetailsView:
                 if w_val and r_val:
                     try:
                         ex.sets.append(Set(
-                            workout_id=0, exercise_id=ex.id or 0,
-                            status="done",
-                            weight=float(w_val), reps=int(r_val),
-                            rest_time=60,
+                            workout_id=self.workout.id, exercise_id=ex.id or 0,
+                            status="done", weight=float(w_val), reps=int(r_val), rest_time=60,
                         ))
                         refresh()
                         self.page.update()
@@ -116,9 +149,11 @@ class WorkoutDetailsView:
         return ft.Column(spacing=8, controls=[ft.Text(ex.name, weight=ft.FontWeight.W_600), table])
 
     def _open_exercises(self, e):
+        from models import Exercise
+
         def on_pick(exercises):
             for exercise in exercises:
-                self.exercises.append(Exercise(
+                self.workout.exercises.append(Exercise(
                     id=exercise.id, name=exercise.name, description=exercise.description,
                     img=exercise.img, muscle_group=exercise.muscle_group, sets=[],
                 ))
